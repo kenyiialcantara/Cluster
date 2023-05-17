@@ -16,6 +16,7 @@ class Server:
         self.dominio = [0,100]
         self.sumas_parciales = []
         self.threads_clients = []
+        self.number_clients = 0
         
         
     def resibe_clientes(self):
@@ -45,7 +46,7 @@ class Server:
             print('Nuevo cliente con ip {} y puerto {}'.format(client_address[0],client_address[1]))
             print('cantida de clientes:',len(self.clients))
             id_available +=1
-            if(len(self.clients)>=4):
+            if(len(self.clients)>=self.number_clients):
                 print('Enviando a los clientes')
                 self.envia_message_cliente()
                 break
@@ -68,6 +69,10 @@ class Server:
 
     
     def start(self):
+        
+        #Configurando el numero de clientes
+        self.number_clients = int(input('Ingresa el numero de clientes:'))
+        
         #Iniciando
         self.serv_socket.bind((self.host,self.port))
         #Experando conexion entrante
