@@ -31,7 +31,7 @@ class Server:
                
            def resibe_message_client(self):
                response_json = self.client_socket.recv(1024).decode()
-               print('Recibiendo de los clientes:',response_json)
+               print('Recibiendo del cliente {}:'.format(self.client_address[0]),response_json)
                response = json.loads(response_json)
                self.suma_parcial = response['result']
                
@@ -44,7 +44,7 @@ class Server:
             t = threading.Thread(target=self.clients[id_available].resibe_message_client)
             self.threads_clients.append(t)
             t.start()
-            print('Nuevo cliente con ip {} y puerto {}'.format(client_address[0],client_address[1]))
+            print('Nuevo cliente con ip {}'.format(client_address[0]))
             print('cantida de clientes:',len(self.clients))
             id_available +=1
             if len(self.clients)>=self.number_clients:
@@ -59,12 +59,13 @@ class Server:
         
         domains = np.linspace(self.dominio[0],self.dominio[1],len(self.clients)+1)
         data = {"function":self.coefficientes_fun_pol,'a':0,"b":0}
+        data['segmentos']=self.segmentos
         i = 0
         for id in self.clients:
             data["a"] = domains[i]
             data['b'] = domains[i+1]
-            data['segmentos']=self.segmentos
             data_json  = json.dumps(data)
+            print('Enviando al cliente con ip {}:'.format(self.clients[id].client_address[0]),data_json)
             #Enviando a todos los clientes
             self.clients[id].client_socket.sendall(data_json.encode())           
             i+=1
