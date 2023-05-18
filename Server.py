@@ -13,7 +13,8 @@ class Server:
         self.serv_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         self.clients = {}
         self.coefficientes_fun_pol = [[7,1],[8,2]] #a0 x + a1 x + a2 x**2 + ... + an x**n
-        self.dominio = [0,100]
+        self.dominio = [5,10]
+        self.segmentos = 10000
         self.sumas_parciales = []
         self.threads_clients = []
         self.number_clients = 0
@@ -30,7 +31,7 @@ class Server:
                
            def resibe_message_client(self):
                response_json = self.client_socket.recv(1024).decode()
-               print('resibiendo de los clientes:',response_json)
+               print('Recibiendo de los clientes:',response_json)
                response = json.loads(response_json)
                self.suma_parcial = response['result']
                
@@ -46,7 +47,7 @@ class Server:
             print('Nuevo cliente con ip {} y puerto {}'.format(client_address[0],client_address[1]))
             print('cantida de clientes:',len(self.clients))
             id_available +=1
-            if(len(self.clients)>=self.number_clients):
+            if len(self.clients)>=self.number_clients:
                 print('Enviando a los clientes')
                 self.envia_message_cliente()
                 break
@@ -62,6 +63,7 @@ class Server:
         for id in self.clients:
             data["a"] = domains[i]
             data['b'] = domains[i+1]
+            data['segmentos']=self.segmentos
             data_json  = json.dumps(data)
             #Enviando a todos los clientes
             self.clients[id].client_socket.sendall(data_json.encode())           
@@ -86,6 +88,7 @@ class Server:
         for id in self.clients:
             suma_integral = suma_integral + self.clients[id].suma_parcial
         print('Integral:',suma_integral)
+        self.serv_socket.close()
     
         
     

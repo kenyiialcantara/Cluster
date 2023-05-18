@@ -15,7 +15,6 @@ class Client:
         return resultado
             
     def integrate_range(self,arra_coff_exp,start, end, num_steps):
-        print('Legue 🇲🇨 ')
         # Función que integra en un rango específico
         step_size = (end - start) / num_steps
         partial_sum = 0
@@ -28,11 +27,8 @@ class Client:
         # Función que integra en paralelo utilizando hilos
         step_size = (end - start) / num_threads
         ranges = [(arra_coff_exp,start + i * step_size, start + (i + 1) * step_size, num_steps) for i in range(num_threads)]
-    
         
-        print('Legue 🙂 ',ranges)
         with Pool(num_threads) as pool:
-            print('Legue ap🛐 ')
             results = pool.starmap(self.integrate_range, ranges)
         
         return sum(results)
@@ -42,7 +38,8 @@ class Client:
     def start(self):
         #conectando
         self.client_socket.connect((self.host,self.port))
-        print('Esperando al que envie el servidor')
+        print('Esperando al que envie la funcion ...')
+
         #Resibiendo la respuesta del servidor
         data_json = self.client_socket.recv(1024).decode()
         print('El servidor envio:',data_json)
@@ -50,13 +47,12 @@ class Client:
         a = data['a']
         b = data['b']
         arra_coff_exp = data['function']
-        print('Legue 🍔 ')
-        # self.function = lambda x: sum([coeff * (x ** exp) for coeff, exp in arra_coff_exp])
-        # print('Legue 👨‍🦲  ',self.function(8))
-        result = self.integrate_parallel(arra_coff_exp,a,b,10000,4)
-        print('Legue 📱 ',result)
-        # #Enviando al servidor
+        segmentos = data['segmentos']
+        result = self.integrate_parallel(arra_coff_exp,a,b,segmentos,10)
+        
+        #Enviando al servidor
         message = {'result':result}
+        print('Enviando al servidor el resultado parcial:',message)
         message_json = json.dumps(message)
         self.client_socket.sendall(message_json.encode())
         self.client_socket.close()
