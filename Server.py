@@ -2,20 +2,22 @@ import socket
 import numpy as np
 import json
 import threading
-import re
-
-
+import time
 
 class Server:
     def __init__(self) -> None:
         self.host = '10.128.0.7'
+        # self.host = 'localhost'
         self.port = 3000
         self.serv_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         self.clients = {}
+        # self.coefficientes_fun_pol = [[7,1],[8,2]] #a0 x + a1 x + a2 x**2 + ... + an x**n
         self.dominio = [0,0]
+        # self.segmentos = 10000
         self.sumas_parciales = []
         self.threads_clients = []
         self.number_clients = 0
+        self.inicio_time = 0
         
         
     def resibe_clientes(self):
@@ -47,6 +49,7 @@ class Server:
             id_available +=1
             if len(self.clients)>=self.number_clients:
                 print('Enviando a los clientes')
+                self.inicio_time = time.time()
                 self.envia_message_cliente()
                 break
         
@@ -97,13 +100,19 @@ class Server:
         self.serv_socket.listen()
         print('\nEl servidor esta escuchando en la ip {} y puerto {} ...'.format(self.host,self.port))
         self.resibe_clientes()
+        
+        #haciendo a que esperen q que todos terminen
         for thread in self.threads_clients:
             thread.join()
         
         suma_integral = 0    
         for id in self.clients:
             suma_integral = suma_integral + self.clients[id].suma_parcial
+        
+        end_time = time.time()
+
         print('Integral:',suma_integral)
+        print("Tiempo de ejecucion:",end_time-self.inicio_time)
         self.serv_socket.close()
     
         
@@ -117,6 +126,10 @@ def main():
 
 if __name__=="__main__":
     main()
+
+
+
+
 
 
 
