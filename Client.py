@@ -57,7 +57,7 @@ class Client:
         message = {"result":result}
         print('Enviando al servidor el resultado parcial:',message)
         message_json = json.dumps(message)
-        self.client_socket.sendall(message_json.encode())
+        self.client_socket.sendall((message_json.strip()).encode())
         self.client_socket.close()
         
 def main():
