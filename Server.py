@@ -64,7 +64,7 @@ class Server:
         for id in self.clients:
             data["a"] = domains[i]
             data['b'] = domains[i+1]
-            data_json  = (json.dumps(data)).strip()
+            data_json  = (json.dumps(data))+'\n'
             print('Enviando al cliente con ip {}:'.format(self.clients[id].client_address[0]),data_json)
             #Enviando a todos los clientes
             self.clients[id].client_socket.sendall(data_json.encode())           
