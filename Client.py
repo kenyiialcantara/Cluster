@@ -8,7 +8,7 @@ def procesar_cadena(cadena):
         return cadena[1:]
 class Client:
     def __init__(self) -> None:
-        self.host = 'localhost'
+        self.host = '10.128.0.7'
         self.port = 3000
         self.client_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         
@@ -43,7 +43,7 @@ class Client:
         print('Esperando al que envie la funcion ...')
 
         #Resibiendo la respuesta del servidor
-        data_json_aux = self.client_socket.recv(1024).decode()
+        data_json_aux = str(self.client_socket.recv(1024).decode())
         data_json = procesar_cadena(data_json_aux)
         print('El servidor envio:',data_json)
         data = json.loads(data_json)
