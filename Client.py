@@ -9,6 +9,7 @@ def procesar_cadena(cadena):
 class Client:
     def __init__(self) -> None:
         self.host = '10.128.0.7'
+        # self.host = 'localhost'
         self.port = 3000
         self.client_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         
