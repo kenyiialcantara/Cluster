@@ -54,7 +54,7 @@ class Client:
         result = self.integrate_parallel(arra_coff_exp,a,b,segmentos,10)
         
         #Enviando al servidor
-        message = {'result':result}
+        message = {"result":result}
         print('Enviando al servidor el resultado parcial:',message)
         message_json = json.dumps(message)
         self.client_socket.sendall(message_json.encode('utf-8'))
