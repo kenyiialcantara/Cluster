@@ -51,7 +51,8 @@ class Client:
         b = data['b']
         arra_coff_exp = data['function']
         segmentos = data['segmentos']
-        result = self.integrate_parallel(arra_coff_exp,a,b,segmentos,10)
+        threads = data['threads']
+        result = self.integrate_parallel(arra_coff_exp,a,b,segmentos,threads)
         
         #Enviando al servidor
         message = {"result":result}
@@ -66,3 +67,4 @@ def main():
 
 if __name__=="__main__":
     main()
+
