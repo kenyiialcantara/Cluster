@@ -30,7 +30,7 @@ class Server:
                self.suma_parcial = 0
                
            def resibe_message_client(self):
-               response_json = self.client_socket.recv(1024).decode()
+               response_json = self.client_socket.recv(1024).decode('utf-8')
                print('Recibiendo del cliente {}:'.format(self.client_address[0]),response_json)
                response = json.loads(response_json)
                self.suma_parcial = response['result']

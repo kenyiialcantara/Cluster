@@ -1,14 +1,10 @@
 import socket
 from multiprocessing import Pool
 import json
-def procesar_cadena(cadena):
-    if cadena.startswith('{'):
-        return cadena
-    else:
-        return cadena[1:]
+
 class Client:
     def __init__(self) -> None:
-        self.host = '10.128.0.7'
+        self.host = 'localhost'
         self.port = 3000
         self.client_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         
@@ -43,8 +39,7 @@ class Client:
         print('Esperando al que envie la funcion ...')
 
         #Resibiendo la respuesta del servidor
-        data_json_aux = str(self.client_socket.recv(1024).decode())
-        data_json = procesar_cadena(data_json_aux)
+        data_json = self.client_socket.recv(1024).decode('utf-8')
         print('El servidor envio:',data_json)
         data = json.loads(data_json)
         a = data['a']
@@ -57,7 +52,7 @@ class Client:
         message = {'result':result}
         print('Enviando al servidor el resultado parcial:',message)
         message_json = json.dumps(message)
-        self.client_socket.sendall(message_json.encode())
+        self.client_socket.sendall(message_json.encode('utf-8'))
         self.client_socket.close()
         
 def main():
