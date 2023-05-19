@@ -43,7 +43,7 @@ class Client:
         print('Esperando al que envie la funcion ...')
 
         #Resibiendo la respuesta del servidor
-        data_json_aux = self.client_socket.recv(1024).decode('utf-8')
+        data_json_aux = self.client_socket.recv(1024).decode()
         data_json = procesar_cadena(data_json_aux.strip())
         print('El servidor envio:',data_json)
         data = json.loads(data_json)
@@ -57,7 +57,7 @@ class Client:
         message = {"result":result}
         print('Enviando al servidor el resultado parcial:',message)
         message_json = json.dumps(message)
-        self.client_socket.sendall(message_json.encode('utf-8'))
+        self.client_socket.sendall(message_json.encode())
         self.client_socket.close()
         
 def main():
