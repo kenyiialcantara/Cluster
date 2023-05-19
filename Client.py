@@ -44,7 +44,7 @@ class Client:
 
         #Resibiendo la respuesta del servidor
         data_json_aux = self.client_socket.recv(1024).decode('utf-8')
-        data_json = procesar_cadena(data_json_aux)
+        data_json = procesar_cadena(data_json_aux.trim())
         print('El servidor envio:',data_json)
         data = json.loads(data_json)
         a = data['a']
