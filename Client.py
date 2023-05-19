@@ -2,7 +2,7 @@ import socket
 from multiprocessing import Pool
 import json
 def procesar_cadena(cadena):
-    if cadena == '{':
+    if cadena[0] == '{':
         return cadena
     else:
         return cadena[1:]
